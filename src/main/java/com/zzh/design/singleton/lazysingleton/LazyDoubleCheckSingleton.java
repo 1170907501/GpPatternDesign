@@ -12,7 +12,14 @@ package com.zzh.design.singleton.lazysingleton;
  */
 public class LazyDoubleCheckSingleton {
     //双重锁检查 懒汉式单例
-    private LazyDoubleCheckSingleton doubleCheckSingleton;
+    /**
+     * volatile 关键字作用：
+     * 1、保证可见性 :线程A在自己的工作线程内创建了实例，但此时还未同步到主存中；
+     * 此时线程B在主存中判断instance还是null，那么线程B又将在自己的工作线程中创建一个实例，这样就创建了多个实例。
+     * 2 、禁止指令重排:new Singleton()是一个非原子操作，需要分配内存、初始化。如果线程A在初始化完成前，线程B发现
+     * Singleton实例已经存在，之前取值，则是一个不完整的实例【因为cpu是分时间片执行的】
+     */
+    private volatile LazyDoubleCheckSingleton doubleCheckSingleton;
 
     private LazyDoubleCheckSingleton(){}
 
